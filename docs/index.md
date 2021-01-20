@@ -1,8 +1,11 @@
 ---
-Title: WHOIS
-Organization: Turbot HQ, Inc
-iconURL: https://turbot.com/images/turbot-icon-original.png
-
+organization: Turbot
+category: ["internet"]
+icon_url: "/images/plugins/turbot/whois.svg"
+brand_color: "#eee"
+display_name: WHOIS
+name: whois
+description: Steampipe plugin for querying domains, name servers and contact information from WHOIS."
 ---
 
 # WHOIS
