@@ -20,7 +20,7 @@
 
 Use SQL to query domain records, name servers and contact information from WHOIS. For example:
 
-```
+```sql
 select
   domain,
   expiration_date
@@ -37,7 +37,7 @@ Learn about [Steampipe](https://steampipe.io/).
 **[Table documentation and examples &rarr;](https://hub.steampipe.io/plugins/turbot/whois)**
 
 Install the plugin:
-```
+```shell
 steampipe plugin install whois
 ```
 
