@@ -81,7 +81,7 @@ func getDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 		whoisRaw, err = whois.Whois(domain)
 		if err != nil {
 			plugin.Logger(ctx).Warn("whois_domain.getDomain", "lookup_error", err)
-			if strings.Contains(err.Error(), "connection reset by peer") {
+			if strings.Contains(err.Error(), "connection reset by peer") || strings.Contains(err.Error(), "domain is empty") {
 				return retry.RetryableError(err)
 			}
 		}
