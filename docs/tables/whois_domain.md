@@ -3,7 +3,7 @@
 WHOIS domain information including expiration, DNS servers and contact details.
 
 Note: It's not practical to list all domains in the world, so this table requires a
-`domain` qualifier to be passed in the where clause for all queries.
+`domain` qualifier to be passed in the `where` or `join` clause for all queries.
 
 
 ## Examples
@@ -57,14 +57,14 @@ select
   client_update_prohibited,
   server_delete_prohibited,
   server_transfer_prohibited,
-  server_update_prohibited,
+  server_update_prohibited
 from
   whois_domain
 where
   domain = 'steampipe.io';
 ```
 
-Check for any EPP status code:
+### Check for any EPP status code:
 
 ```sql
 select
@@ -97,7 +97,7 @@ where
 ```sql
 select
   domain,
-  registrar->>'name'
+  registrar->>'name' as registrar
 from
   whois_domain
 where
@@ -105,8 +105,6 @@ where
 ```
 
 ### Working with multiple domains
-
-Using in with a defined list of domains works:
 
 ```sql
 select
@@ -122,64 +120,6 @@ where
     'yahoo.com'
   );
 ```
-
-But, using a join or a subselect does not work (yet). The postgres planner
-tries to list all domains without passing the qualifier to the foreign
-table.
-
-
-```sql
--- DOES NOT WORK
-select
-  domain,
-  expiration_date
-from
-  whois_domain
-where
-  domain in (
-    select
-      domain
-    from
-      my_custom_domains_table
-  );
-```
-
-```sql
--- DOES NOT WORK
-select
-  wd.domain,
-  wd.expiration_date
-from
-  whois_domain as wd,
-  my_custom_domains_table as d
-where
-  wd.domain = d.domain;
-```
-
-```sql
--- DOES NOT WORK
-select
-  wd.domain,
-  wd.expiration_date
-from
-  my_custom_domains_table as d
-left join lateral
-  (select * from whois_domain where domain = d.domain) as wd
-on true;
-```
-
-```sql
--- DOES NOT WORK
-with targets as (select domain from my_custom_domains_table)
-select
-  domain,
-  expiration_date
-from
-  whois_domain
-where
-  domain in (select domain from targets);
-```
-
 
 ## Implementation notes
 
