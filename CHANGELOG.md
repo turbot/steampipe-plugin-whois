@@ -1,3 +1,10 @@
+## v0.0.2 [2021-03-18]
+
+_Enhancements_
+
+- Updated examples for `whois_domain` table ([#7](https://github.com/turbot/steampipe-plugin-whois/pull/7))
+- Recompiled plugin with [steampipe-plugin-sdk v0.2.4](https://github.com/turbot/steampipe-plugin-sdk/blob/main/CHANGELOG.md#v024-2021-03-16)
+
 ## v0.1.1 [2021-02-25]
 
 _Bug fixes_
