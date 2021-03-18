@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/likexian/whois-go"
-	"github.com/likexian/whois-parser-go"
+	whoisparser "github.com/likexian/whois-parser-go"
 	"github.com/sethvargo/go-retry"
 
 	"github.com/turbot/steampipe-plugin-sdk/grpc/proto"
@@ -19,11 +19,8 @@ func tableWhoisDomain(ctx context.Context) *plugin.Table {
 		Name:        "whois_domain",
 		Description: "WHOIS domain information including expiration, DNS servers and contact details.",
 		List: &plugin.ListConfig{
-			Hydrate: listDomain,
-		},
-		Get: &plugin.GetConfig{
 			KeyColumns: plugin.SingleColumn("domain"),
-			Hydrate:    getDomain,
+			Hydrate:    listDomain,
 		},
 		Columns: []*plugin.Column{
 			// Top columns
@@ -60,11 +57,6 @@ func tableWhoisDomain(ctx context.Context) *plugin.Table {
 }
 
 func listDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	// If the user requests a list of domains with no quals, then just return empty.
-	return nil, nil
-}
-
-func getDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	quals := d.KeyColumnQuals
 	domain := quals["domain"].GetStringValue()
 	var whoisRaw string
@@ -95,17 +87,30 @@ func getDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 
 	// Not found errors come back as success with a not found string to match
 	if strings.Index(whoisRaw, "No match for") == 0 {
-		plugin.Logger(ctx).Warn("whois_domain.getDomain", "not_found_error", err)
+		plugin.Logger(ctx).Warn("whois_domain.getDomain", "not_found_error", domain)
 		return nil, nil
 	}
 
 	result, err := whoisparser.Parse(whoisRaw)
-	if err != nil {
+	switch err {
+	case nil:
+		break
+	case whoisparser.ErrDomainNotFound:
+		plugin.Logger(ctx).Warn("whois_domain.getDomain", "ErrDomainNotFound", err)
+		plugin.Logger(ctx).Debug("whois_domain.getDomain", "domain", domain)
+		return nil, nil
+	case whoisparser.ErrDomainInvalidData:
+		plugin.Logger(ctx).Warn("whois_domain.getDomain", "ErrDomainInvalidData", err)
+		plugin.Logger(ctx).Debug("whois_domain.getDomain", "whoisRaw", whoisRaw)
+		return nil, nil
+	default:
 		plugin.Logger(ctx).Error("whois_domain.getDomain", "parse_error", err)
+		plugin.Logger(ctx).Debug("whois_domain.getDomain", "whoisRaw", whoisRaw)
 		return nil, err
 	}
 
-	return result, nil
+	d.StreamListItem(ctx, result)
+	return nil, nil
 }
 
 func statusToBool(ctx context.Context, d *transform.TransformData) (interface{}, error) {
