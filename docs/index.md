@@ -38,7 +38,7 @@ where
 
 ## Documentation
 
-- **[Table definitions & examples →](whois/tables)**
+- **[Table definitions & examples →](/plugins/turbot/whois/tables)**
 
 ## Get started
 
