@@ -1,3 +1,9 @@
+## v0.1.3 [2021-04-02]
+
+_What's new?_
+
+- Updated README and docs home page ([#9](https://github.com/turbot/steampipe-plugin-whois/pull/9))
+
 ## v0.1.2 [2021-03-18]
 
 _Enhancements_
