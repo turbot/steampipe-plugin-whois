@@ -30,7 +30,7 @@ Prerequisites:
 Clone:
 
 ```sh
-git clone git@github.com:turbot/steampipe-plugin-whois
+git clone https://github.com/turbot/steampipe-plugin-whois.git
 cd steampipe-plugin-whois
 ```
 
