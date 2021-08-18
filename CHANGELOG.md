@@ -1,3 +1,10 @@
+## v0.2.0 [2021-08-18]
+
+_Enhancements_
+
+- Accept more date formats and don't error if unparseable (e.g. `tesco.co.uk` created date is `before Aug-1996`).
+- Updated Steampipe SDK version for better caching, etc.
+
 ## v0.1.3 [2021-04-02]
 
 _What's new?_
