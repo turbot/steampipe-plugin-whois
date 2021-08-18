@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/araddon/dateparse"
 	"github.com/likexian/whois-go"
 	whoisparser "github.com/likexian/whois-parser-go"
 	"github.com/sethvargo/go-retry"
@@ -34,9 +35,9 @@ func tableWhoisDomain(ctx context.Context) *plugin.Table {
 			{Name: "status", Type: proto.ColumnType_JSON, Transform: transform.FromField("Domain.Status").NullIfZero(), Description: "Extensible Provisioning Protocol (EPP) status codes set on the domain. Common status codes (e.g. client_transfer_prohibited) are also elevated to column level. A full list is available at https://www.icann.org/resources/pages/epp-status-codes-2014-06-16-en"},
 			{Name: "name_servers", Type: proto.ColumnType_JSON, Transform: transform.FromField("Domain.NameServers").NullIfZero(), Description: "List of name servers for the domain."},
 			{Name: "dns_sec", Type: proto.ColumnType_BOOL, Transform: transform.FromField("Domain.DnsSec").NullIfZero(), Description: "True if the domain has enabled DNSSEC."},
-			{Name: "created_date", Type: proto.ColumnType_DATETIME, Transform: transform.FromField("Domain.CreatedDate").NullIfZero(), Description: "Date when the domain was first registered."},
-			{Name: "updated_date", Type: proto.ColumnType_DATETIME, Transform: transform.FromField("Domain.UpdatedDate").NullIfZero(), Description: "Last date when the domain record was updated."},
-			{Name: "expiration_date", Type: proto.ColumnType_DATETIME, Transform: transform.FromField("Domain.ExpirationDate").NullIfZero(), Description: "Expiration date for the domain."},
+			{Name: "created_date", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Domain.CreatedDate").Transform(whoisDateToTimestamp).NullIfZero(), Description: "Date when the domain was first registered."},
+			{Name: "updated_date", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Domain.UpdatedDate").Transform(whoisDateToTimestamp).NullIfZero(), Description: "Last date when the domain record was updated."},
+			{Name: "expiration_date", Type: proto.ColumnType_TIMESTAMP, Transform: transform.FromField("Domain.ExpirationDate").Transform(whoisDateToTimestamp).NullIfZero(), Description: "Expiration date for the domain."},
 
 			// Commonly used EPP status codes
 			{Name: "client_delete_prohibited", Type: proto.ColumnType_BOOL, Transform: transform.FromP(statusToBool, "clientdeleteprohibited"), Description: "This status code tells your domain's registry to reject requests to delete the domain."},
@@ -111,6 +112,18 @@ func listDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 
 	d.StreamListItem(ctx, result)
 	return nil, nil
+}
+
+// WHOIS dates can be pretty crazy, so be forgiving in our parsing and fail to null
+// tesco.co.uk -> "before Aug-1996"
+// stripe.co.uk -> "14-Jul-2011"
+func whoisDateToTimestamp(ctx context.Context, d *transform.TransformData) (interface{}, error) {
+	ds := d.Value.(string)
+	t, err := dateparse.ParseAny(ds)
+	if err != nil {
+		return nil, nil
+	}
+	return t, nil
 }
 
 func statusToBool(ctx context.Context, d *transform.TransformData) (interface{}, error) {
