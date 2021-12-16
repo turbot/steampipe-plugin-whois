@@ -1,3 +1,10 @@
+## v0.3.0 [2021-12-16]
+
+_Enhancements_
+
+- Recompiled plugin with [steampipe-plugin-sdk v1.8.2](https://github.com/turbot/steampipe-plugin-sdk/blob/main/CHANGELOG.md#v182--2021-11-22) ([#18](https://github.com/turbot/steampipe-plugin-whois/pull/18))
+- Recompiled plugin with Go version 1.17 ([#18](https://github.com/turbot/steampipe-plugin-whois/pull/18))
+
 ## v0.2.0 [2021-08-18]
 
 _Enhancements_
