@@ -10,9 +10,9 @@ import (
 	whoisparser "github.com/likexian/whois-parser-go"
 	"github.com/sethvargo/go-retry"
 
-	"github.com/turbot/steampipe-plugin-sdk/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v3/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v3/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v3/plugin/transform"
 )
 
 func tableWhoisDomain(ctx context.Context) *plugin.Table {
