@@ -72,4 +72,4 @@ connection "whois" {
 ## Get involved
 
 * Open source: https://github.com/turbot/steampipe-plugin-whois
-* Community: [Discussion forums](https://github.com/turbot/steampipe/discussions)
+* Community: [Slack Channel](https://steampipe.io/community/join)
