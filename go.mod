@@ -4,8 +4,8 @@ go 1.18
 
 require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
-	github.com/likexian/whois-go v1.7.2
-	github.com/likexian/whois-parser-go v1.15.1
+	github.com/likexian/whois v1.12.5
+	github.com/likexian/whois-parser v1.23.1
 	github.com/sethvargo/go-retry v0.1.0
 	github.com/turbot/steampipe-plugin-sdk/v3 v3.1.0
 )
@@ -29,7 +29,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.11.1 // indirect
 	github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb // indirect
 	github.com/iancoleman/strcase v0.2.0 // indirect
-	github.com/likexian/gokit v0.23.3 // indirect
+	github.com/likexian/gokit v0.25.8 // indirect
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.10 // indirect
 	github.com/mattn/go-runewidth v0.0.10 // indirect
@@ -44,9 +44,9 @@ require (
 	github.com/tkrajina/go-reflector v0.5.4 // indirect
 	github.com/turbot/go-kit v0.3.0 // indirect
 	github.com/zclconf/go-cty v1.10.0 // indirect
-	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
-	golang.org/x/sys v0.0.0-20211102061401-a2f17f7b995c // indirect
-	golang.org/x/text v0.3.5 // indirect
+	golang.org/x/net v0.0.0-20220531201128-c960675eff93 // indirect
+	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
+	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 	google.golang.org/grpc v1.44.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
