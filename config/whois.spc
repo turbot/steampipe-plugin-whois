@@ -1,3 +1,3 @@
 connection "whois" {
-  plugin    = "whois"                 
+  plugin = "whois"
 }
