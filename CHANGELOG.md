@@ -3,6 +3,7 @@
 _Enhancements_
 
 - Recompiled plugin with [whois-parser v1.24.0](https://github.com/likexian/whois-parser/releases/tag/v1.24.0). ([#28](https://github.com/turbot/steampipe-plugin-whois/pull/28))
+- Recompiled plugin with [steampipe-plugin-sdk v3.3.1](https://github.com/turbot/steampipe-plugin-sdk/blob/main/CHANGELOG.md#v331--2022-06-30), which includes several caching fixes. ([#27](https://github.com/turbot/steampipe-plugin-whois/pull/27))
 
 _Bug fixes_
 
