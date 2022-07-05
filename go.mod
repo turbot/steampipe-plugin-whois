@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
 	github.com/likexian/whois v1.12.5
-	github.com/likexian/whois-parser v1.23.1
+	github.com/likexian/whois-parser v1.24.0
 	github.com/sethvargo/go-retry v0.1.0
 	github.com/turbot/steampipe-plugin-sdk/v3 v3.1.0
 )
@@ -44,7 +44,7 @@ require (
 	github.com/tkrajina/go-reflector v0.5.4 // indirect
 	github.com/turbot/go-kit v0.3.0 // indirect
 	github.com/zclconf/go-cty v1.10.0 // indirect
-	golang.org/x/net v0.0.0-20220531201128-c960675eff93 // indirect
+	golang.org/x/net v0.0.0-20220630215102-69896b714898 // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect

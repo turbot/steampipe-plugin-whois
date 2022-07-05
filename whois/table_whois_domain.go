@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/araddon/dateparse"
-	"github.com/likexian/whois-go"
-	whoisparser "github.com/likexian/whois-parser-go"
+	"github.com/likexian/whois"
+	whoisparser "github.com/likexian/whois-parser"
 	"github.com/sethvargo/go-retry"
 
 	"github.com/turbot/steampipe-plugin-sdk/v3/grpc/proto"
@@ -96,11 +96,11 @@ func listDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 	switch err {
 	case nil:
 		break
-	case whoisparser.ErrDomainNotFound:
+	case whoisparser.ErrNotFoundDomain:
 		plugin.Logger(ctx).Warn("whois_domain.getDomain", "ErrDomainNotFound", err)
 		plugin.Logger(ctx).Debug("whois_domain.getDomain", "domain", domain)
 		return nil, nil
-	case whoisparser.ErrDomainInvalidData:
+	case whoisparser.ErrDomainDataInvalid:
 		plugin.Logger(ctx).Warn("whois_domain.getDomain", "ErrDomainInvalidData", err)
 		plugin.Logger(ctx).Debug("whois_domain.getDomain", "whoisRaw", whoisRaw)
 		return nil, nil
