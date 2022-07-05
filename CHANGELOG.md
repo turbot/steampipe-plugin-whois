@@ -1,3 +1,13 @@
+## v0.5.0 [2022-06-05]
+
+_Enhancements_
+
+- Recompiled plugin with [whois-parser v1.24.0](https://github.com/likexian/whois-parser/releases/tag/v1.24.0). ([#28](https://github.com/turbot/steampipe-plugin-whois/pull/28))
+
+_Bug fixes_
+
+- Fixed `.dk` domains returning incorrect nameservers. ([#28](https://github.com/turbot/steampipe-plugin-whois/pull/28))
+
 ## v0.4.1 [2022-05-23]
 
 _Bug fixes_
