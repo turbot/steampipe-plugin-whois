@@ -7,7 +7,7 @@ require (
 	github.com/likexian/whois v1.12.5
 	github.com/likexian/whois-parser v1.24.0
 	github.com/sethvargo/go-retry v0.1.0
-	github.com/turbot/steampipe-plugin-sdk/v4 v4.1.6
+	github.com/turbot/steampipe-plugin-sdk/v5 v4.1.6
 )
 
 require (

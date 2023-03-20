@@ -10,9 +10,9 @@ import (
 	whoisparser "github.com/likexian/whois-parser"
 	"github.com/sethvargo/go-retry"
 
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func tableWhoisDomain(ctx context.Context) *plugin.Table {
@@ -58,7 +58,7 @@ func tableWhoisDomain(ctx context.Context) *plugin.Table {
 }
 
 func listDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	quals := d.KeyColumnQuals
+	quals := d.EqualsQuals
 	domain := quals["domain"].GetStringValue()
 	var whoisRaw string
 
