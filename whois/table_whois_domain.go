@@ -63,13 +63,9 @@ func listDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 	var whoisRaw string
 
 	// WHOIS servers are fussy about load, so retry with backoff
-	b, err := retry.NewFibonacci(100 * time.Millisecond)
-	if err != nil {
-		plugin.Logger(ctx).Error("whois_domain.getDomain", "retry_init_error", err)
-		return nil, err
-	}
+	b:= retry.NewFibonacci(100 * time.Millisecond)
 
-	err = retry.Do(ctx, retry.WithMaxRetries(10, b), func(ctx context.Context) error {
+	err := retry.Do(ctx, retry.WithMaxRetries(10, b), func(ctx context.Context) error {
 		var err error
 		whoisRaw, err = whois.Whois(domain)
 		if err != nil {
