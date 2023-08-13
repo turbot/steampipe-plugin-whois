@@ -8,6 +8,7 @@ import (
 	"github.com/araddon/dateparse"
 	"github.com/likexian/whois"
 	whoisparser "github.com/likexian/whois-parser"
+	"github.com/openrdap/rdap"
 	"github.com/sethvargo/go-retry"
 
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
@@ -60,12 +61,26 @@ func tableWhoisDomain(ctx context.Context) *plugin.Table {
 func listDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	quals := d.EqualsQuals
 	domain := quals["domain"].GetStringValue()
+
+	// Attempt rdap lookup first.
+	client := &rdap.Client{}
+	rdapResult, err := client.QueryDomain(domain)
+
+	if err == nil {
+		plugin.Logger(ctx).Debug("whois_domain.listDomain", "rdapResult", rdapResult)
+		mapped := rdapToWhoisDomain(domain, rdapResult)
+		plugin.Logger(ctx).Debug("whois_domain.listDomain", "mapped.Domain", mapped.Domain)
+		d.StreamListItem(ctx, mapped)
+		return nil, nil
+	}
+
+	// Drop to whois.
 	var whoisRaw string
 
 	// WHOIS servers are fussy about load, so retry with backoff
-	b:= retry.NewFibonacci(100 * time.Millisecond)
+	b := retry.NewFibonacci(100 * time.Millisecond)
 
-	err := retry.Do(ctx, retry.WithMaxRetries(10, b), func(ctx context.Context) error {
+	err = retry.Do(ctx, retry.WithMaxRetries(10, b), func(ctx context.Context) error {
 		var err error
 		whoisRaw, err = whois.Whois(domain)
 		if err != nil {
@@ -138,4 +153,116 @@ func containsString(items []string, target string) bool {
 		}
 	}
 	return false
+}
+
+func rdapToWhoisDomain(passedDomain string, r *rdap.Domain) whoisparser.WhoisInfo {
+	var nameservers []string
+	for _, ns := range r.Nameservers {
+		nameservers = append(nameservers, ns.LDHName)
+	}
+	dnssec := false
+	if r.SecureDNS != nil && r.SecureDNS.DelegationSigned != nil && *r.SecureDNS.DelegationSigned {
+		dnssec = true
+	}
+	createdDate := ""
+	updatedDate := ""
+	expireDate := ""
+	for _, event := range r.Events {
+		switch event.Action {
+		case "registration":
+			createdDate = event.Date
+		case "expiration":
+			expireDate = event.Date
+		case "last changed":
+			updatedDate = event.Date
+		}
+	}
+
+	domain := &whoisparser.Domain{
+		ID:             r.Handle,
+		Domain:         passedDomain,
+		Punycode:       r.LDHName,
+		Extension:      r.LDHName[strings.LastIndex(r.LDHName, ".")+1:],
+		WhoisServer:    r.Port43,
+		Status:         spacesSpaced(r.Status),
+		NameServers:    nameservers,
+		DNSSec:         dnssec,
+		CreatedDate:    createdDate,
+		UpdatedDate:    updatedDate,
+		ExpirationDate: expireDate,
+	}
+
+	registrar := entityToContact("registrar", r.Entities)
+	registrant := entityToContact("registrant", r.Entities)
+	admin := entityToContact("admin", r.Entities)
+	technical := entityToContact("technical", r.Entities)
+	billing := entityToContact("billing", r.Entities)
+
+	return whoisparser.WhoisInfo{
+		Domain:         domain,
+		Registrar:      registrar,
+		Registrant:     registrant,
+		Administrative: admin,
+		Technical:      technical,
+		Billing:        billing,
+	}
+}
+
+func spacesSpaced(sa []string) (spacelessSA []string) {
+	for _, s := range sa {
+		spacelessSA = append(spacelessSA, strings.ReplaceAll(s, " ", ""))
+	}
+	return
+}
+
+func assignIfEmpty(target string, newValue string) string {
+	if target == "" {
+		return newValue
+	}
+	return target
+}
+
+func vcardToContact(contact *whoisparser.Contact, entity rdap.Entity) {
+	if entity.VCard != nil && entity.VCard.Properties != nil {
+		for _, property := range entity.VCard.Properties {
+			switch property.Name {
+			case "fn":
+				contact.Name = assignIfEmpty(contact.Name, strings.Join(property.Values(), " "))
+			case "org":
+				contact.Organization = strings.Join(property.Values(), " ")
+			case "adr":
+				// TODO: https://datatracker.ietf.org/doc/html/rfc6350#section-6.3.1
+				contact.Street = ""
+				contact.City = ""
+				contact.Province = ""
+				contact.PostalCode = ""
+				contact.Country = ""
+			case "tel":
+				// TODO: parse these more to detrimine if it's fax number.
+				contact.Phone = strings.Join(property.Values(), " ")
+				contact.Fax = ""
+			case "email":
+				contact.Email = strings.Join(property.Values(), " ")
+			case "url":
+				contact.ReferralURL = strings.Join(property.Values(), " ")
+			}
+		}
+
+	}
+}
+
+func entityToContact(role string, entities []rdap.Entity) *whoisparser.Contact {
+	contact := &whoisparser.Contact{}
+	for _, entity := range entities {
+		if containsString(entity.Roles, role) {
+			contact.ID = entity.Handle
+			vcardToContact(contact, entity)
+			for _, inner := range entity.Entities {
+				if containsString(inner.Roles, "abuse") {
+					vcardToContact(contact, inner)
+				}
+			}
+		}
+	}
+	return contact
 }
