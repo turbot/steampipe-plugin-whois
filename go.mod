@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
 	github.com/likexian/whois v1.12.5
-	github.com/likexian/whois-parser v1.24.0
+	github.com/likexian/whois-parser v1.24.9
 	github.com/sethvargo/go-retry v0.2.4
 	github.com/turbot/steampipe-plugin-sdk/v5 v5.6.2
 )
@@ -60,7 +60,7 @@ require (
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/klauspost/compress v1.15.11 // indirect
-	github.com/likexian/gokit v0.25.8 // indirect
+	github.com/likexian/gokit v0.25.13 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
