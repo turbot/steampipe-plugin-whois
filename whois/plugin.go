@@ -13,6 +13,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 		DefaultTransform: transform.FromGo().NullIfZero(),
 		TableMap: map[string]*plugin.Table{
 			"whois_domain": tableWhoisDomain(ctx),
+			"rdap_domain":  tableRdapDomain(ctx),
 		},
 	}
 	return p
