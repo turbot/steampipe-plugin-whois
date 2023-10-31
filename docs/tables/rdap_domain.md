@@ -5,7 +5,6 @@ An RDAP domain refers to a specific domain name for which you can retrieve regis
 **Note:** It's not practical to list all domains in the world, so this table requires a
 `domain` qualifier to be passed in the `where` or `join` clause for all queries.
 
-
 ## Examples
 
 ### Basic whois info
@@ -120,6 +119,59 @@ select
 from
   rdap_domain,
   jsonb_array_elements(public_ids) as p
+where
+  domain = 'steampipe.io';
+```
+
+### Get network information of a domain
+
+```sql
+select
+  domain,
+  network ->> 'Handle' as network_handle,
+  network ->> 'ObjectClassName' as network_object_class_name,
+  network ->> 'StartAddress' as networkStartAddress,
+  network ->> 'EndAddress' as networkEndAddress,
+  network ->> 'IPVersion' as networkIPVersion,
+  network ->> 'Name' as networkName,
+  network ->> 'Type' as networkType,
+  network ->> 'Country' as networkCountry,
+  network ->> 'ParentHandle' as networkParentHandle,
+  network -> 'Status' as networkStatus
+from
+  rdap_domain
+where
+  domain = 'steampipe.io';
+```
+
+### Get secure DNS details of a domain
+
+```sql
+select
+  domain,
+  secure_dns ->> 'ZoneSigned' as zone_signed,
+  secure_dns ->> 'DelegationSigned' as delegation_signed,
+  secure_dns ->> 'MaxSigLife' as max_sig_life,
+  secure_dns ->> 'Ds' as data_structure,
+  secure_dns ->> 'Keys' as keys
+from
+  rdap_domain
+where
+  domain = 'steampipe.io';
+```
+
+### Get a domain remarks
+
+```sql
+select
+  domain,
+  r ->> 'Title' as title,
+  r ->> 'Type' as type,
+  r ->> 'Description' as description,
+  r ->> 'Links' as links
+from
+  rdap_domain,
+  jsonb_array_elements(remarks) as r
 where
   domain = 'steampipe.io';
 ```

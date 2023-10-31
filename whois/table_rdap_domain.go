@@ -37,7 +37,7 @@ func tableRdapDomain(ctx context.Context) *plugin.Table {
 			{Name: "notices", Type: proto.ColumnType_JSON, Description: "Information about the service."},
 			{Name: "public_ids", Type: proto.ColumnType_JSON, Description: "Public identifiers associated with the domain.", Transform: transform.FromField("PublicIDs")},
 			{Name: "secure_dns", Type: proto.ColumnType_JSON, Description: "Secure DNS information.", Transform: transform.FromField("SecureDNS")},
-			{Name: "Remarks", Type: proto.ColumnType_JSON, Description: "Additional remarks or notes associated with the domain registration."},
+			{Name: "remarks", Type: proto.ColumnType_JSON, Description: "Additional remarks or notes associated with the domain registration."},
 			{Name: "status", Type: proto.ColumnType_JSON, Description: "An array of status flags describing the object state."},
 			{Name: "variants", Type: proto.ColumnType_JSON, Description: "The internationalized domain name (IDN) variants."},
 		},
