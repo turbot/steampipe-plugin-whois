@@ -8,6 +8,7 @@ name: whois
 description: Steampipe plugin for querying domains, name servers and contact information from WHOIS.
 og_description: Query WHOIS with SQL! Open source CLI. No DB required. 
 og_image: "/images/plugins/turbot/whois-social-graphic.png"
+engines: ["steampipe", "sqlite", "postgres", "export"]
 ---
 
 # WHOIS + Steampipe
