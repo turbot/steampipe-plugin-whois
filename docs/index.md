@@ -8,11 +8,12 @@ name: whois
 description: Steampipe plugin for querying domains, name servers and contact information from WHOIS.
 og_description: Query WHOIS with SQL! Open source CLI. No DB required. 
 og_image: "/images/plugins/turbot/whois-social-graphic.png"
+engines: ["steampipe", "sqlite", "postgres", "export"]
 ---
 
 # WHOIS + Steampipe
 
-[Steampipe](https://steampipe.io) is an open source CLI to instantly query cloud APIs using SQL.
+[Steampipe](https://steampipe.io) is an open-source zero-ETL engine to instantly query cloud APIs using SQL.
 
 [WHOIS](https://whois.icann.org/en/about-whois) is a widely used Internet record listing that identifies who owns a domain and how to get in contact with them. The Internet Corporation for Assigned Names and Numbers (ICANN) regulates domain name registration and ownership.
 
@@ -69,7 +70,4 @@ connection "whois" {
 }
 ```
 
-## Get involved
 
-* Open source: https://github.com/turbot/steampipe-plugin-whois
-* Community: [Join #steampipe on Slack →](https://turbot.com/community/join)
