@@ -22,8 +22,8 @@ func tableRdapDomain(ctx context.Context) *plugin.Table {
 			// Top columns
 			{Name: "domain", Type: proto.ColumnType_STRING, Transform: transform.FromQual("domain"), Description: "Domain name the RDAP information relates to."},
 
-			{Name: "domain_id", Type: proto.ColumnType_STRING, Transform: transform.FromField("Handle").NullIfZero(), Description: "Unique identifier for the domain."},
-			{Name: "object_class_name", Type: proto.ColumnType_STRING, Description: "String 'domain' representing the object type in RDAP."},
+			{Name: "handle", Type: proto.ColumnType_STRING, Transform: transform.FromField("Handle").NullIfZero(), Description: "Registry-unique string identifier referencing the domain (domain name)."},
+			{Name: "object_class_name", Type: proto.ColumnType_STRING, Description: "The data structure, a member named 'objectClassName', gives the object class name of a particular object as a string. This identifies the type of object being processed.  An objectClassName is REQUIRED in all RDAP response objects so that the type of the object can be interpreted."},
 			{Name: "ldh_name", Type: proto.ColumnType_STRING, Description: "Textual representation of DNS names.", Transform: transform.FromField("LDHName")},
 
 			// JSON fields
