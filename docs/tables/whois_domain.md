@@ -1,16 +1,35 @@
-# Table: whois_domain
+---
+title: "Steampipe Table: whois_domain - Query Whois Domains using SQL"
+description: "Allows users to query Whois Domains, providing specific details about domain names, their registration, and ownership information."
+---
 
-WHOIS domain information including expiration, DNS servers and contact details.
+# Table: whois_domain - Query Whois Domains using SQL
 
-Note: It's not practical to list all domains in the world, so this table requires a
+Whois is a protocol that is used to query databases that store the registered users or assignees of an Internet resource, such as a domain name or an IP address block. It provides information related to the registration and ownership of a domain name. This includes details about the registrant, administrative, billing and technical contacts.
+
+## Table Usage Guide
+
+The `whois_domain` table provides insights into domain names within the Whois protocol. As a security analyst, explore domain-specific details through this table, including registration, ownership, and associated metadata. Utilize it to uncover information about domains, such as their registrant details, administrative contacts, and the status of the domain.
+
+**Important Notes**
+- It's not practical to list all domains in the world, so this table requires a
 `domain` qualifier to be passed in the `where` or `join` clause for all queries.
-
 
 ## Examples
 
 ### Basic whois info
 
-```sql
+```sql+postgres
+select
+  domain,
+  expiration_date
+from
+  whois_domain
+where
+  domain = 'steampipe.io';
+```
+
+```sql+sqlite
 select
   domain,
   expiration_date
@@ -22,7 +41,7 @@ where
 
 ### Days until expiration
 
-```sql
+```sql+postgres
 select
   domain,
   expiration_date,
@@ -33,9 +52,30 @@ where
   domain = 'steampipe.io';
 ```
 
+```sql+sqlite
+select
+  domain,
+  expiration_date,
+  julianday(expiration_date) - julianday(date('now')) as days_until_expiration
+from
+  whois_domain
+where
+  domain = 'steampipe.io';
+```
+
 ### Get name server information
 
-```sql
+```sql+postgres
+select
+  domain,
+  name_servers
+from
+  whois_domain
+where
+  domain = 'steampipe.io';
+```
+
+```sql+sqlite
 select
   domain,
   name_servers
@@ -49,7 +89,22 @@ where
 
 Commonly used protections:
 
-```sql
+```sql+postgres
+select
+  domain,
+  client_delete_prohibited,
+  client_transfer_prohibited,
+  client_update_prohibited,
+  server_delete_prohibited,
+  server_transfer_prohibited,
+  server_update_prohibited
+from
+  whois_domain
+where
+  domain = 'steampipe.io';
+```
+
+```sql+sqlite
 select
   domain,
   client_delete_prohibited,
@@ -66,7 +121,7 @@ where
 
 ### Check for any EPP status code:
 
-```sql
+```sql+postgres
 select
   domain,
   status,
@@ -77,9 +132,20 @@ where
   domain = 'steampipe.io';
 ```
 
+```sql+sqlite
+select
+  domain,
+  status,
+  json_extract(status, '$.pendingtransfer') as pending_transfer
+from
+  whois_domain
+where
+  domain = 'steampipe.io';
+```
+
 ### Contact information
 
-```sql
+```sql+postgres
 select
   domain,
   jsonb_pretty(admin) as admin,
@@ -92,9 +158,22 @@ where
   domain = 'steampipe.io';
 ```
 
+```sql+sqlite
+select
+  domain,
+  admin,
+  billing,
+  registrant,
+  technical
+from
+  whois_domain
+where
+  domain = 'steampipe.io';
+```
+
 ### Registrar managing the domain
 
-```sql
+```sql+postgres
 select
   domain,
   registrar->>'name' as registrar
@@ -104,9 +183,34 @@ where
   domain = 'steampipe.io';
 ```
 
+```sql+sqlite
+select
+  domain,
+  json_extract(registrar, '$.name') as registrar
+from
+  whois_domain
+where
+  domain = 'steampipe.io';
+```
+
 ### Working with multiple domains
 
-```sql
+```sql+postgres
+select
+  domain,
+  expiration_date
+from
+  whois_domain
+where
+  domain in (
+    'github.com',
+    'google.com',
+    'steampipe.io',
+    'yahoo.com'
+  );
+```
+
+```sql+sqlite
 select
   domain,
   expiration_date
