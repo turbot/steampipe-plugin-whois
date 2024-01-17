@@ -1,5 +1,5 @@
 ---
-title: "Steampipe Table: rdap_domain - Query Whois Domains using SQL"
+title: "Steampipe Table: rdap_domain - Query RDAP Domains using SQL"
 description: "Allows users to query RDAP domain registration data in a structured and standardized way."
 ---
 
@@ -17,7 +17,7 @@ It's not practical to list all domains in the world, so this table requires a
 
 ## Examples
 
-### Basic whois info
+### Basic RDAP info
 
 ```sql+postgres
 select
