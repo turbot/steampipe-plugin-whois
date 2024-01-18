@@ -60,10 +60,11 @@ func tableWhoisDomain(ctx context.Context) *plugin.Table {
 func listDomain(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
 	quals := d.EqualsQuals
 	domain := quals["domain"].GetStringValue()
+
 	var whoisRaw string
 
 	// WHOIS servers are fussy about load, so retry with backoff
-	b:= retry.NewFibonacci(100 * time.Millisecond)
+	b := retry.NewFibonacci(100 * time.Millisecond)
 
 	err := retry.Do(ctx, retry.WithMaxRetries(10, b), func(ctx context.Context) error {
 		var err error

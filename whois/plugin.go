@@ -12,6 +12,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 		Name:             "steampipe-plugin-whois",
 		DefaultTransform: transform.FromGo().NullIfZero(),
 		TableMap: map[string]*plugin.Table{
+			"rdap_domain":  tableRdapDomain(ctx),
 			"whois_domain": tableWhoisDomain(ctx),
 		},
 	}
