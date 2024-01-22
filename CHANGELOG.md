@@ -1,3 +1,10 @@
+## v0.11.0 [2024-01-22]
+
+_What's new?_
+
+- New tables added
+  - [rdap_domain](https://hub.steampipe.io/plugins/turbot/whois/tables/rdap_domain) ([#46](https://github.com/turbot/steampipe-plugin-whois/pull/46))
+
 ## v0.10.0 [2023-12-12]
 
 _What's new?_
