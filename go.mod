@@ -1,8 +1,8 @@
 module github.com/turbot/steampipe-plugin-whois
 
-go 1.21.0
+go 1.22.4
 
-toolchain go1.21.1
+toolchain go1.22.6
 
 require (
 	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de
@@ -10,7 +10,7 @@ require (
 	github.com/likexian/whois-parser v1.24.0
 	github.com/openrdap/rdap v0.9.1
 	github.com/sethvargo/go-retry v0.2.4
-	github.com/turbot/steampipe-plugin-sdk/v5 v5.10.1
+	github.com/turbot/steampipe-plugin-sdk/v5 v5.10.3
 )
 
 require (
