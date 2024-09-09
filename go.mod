@@ -9,7 +9,7 @@ require (
 	github.com/likexian/whois v1.12.5
 	github.com/likexian/whois-parser v1.24.0
 	github.com/openrdap/rdap v0.9.1
-	github.com/sethvargo/go-retry v0.2.4
+	github.com/sethvargo/go-retry v0.3.0
 	github.com/turbot/steampipe-plugin-sdk/v5 v5.10.4
 )
 
